@@ -10,6 +10,7 @@
       <div class="form">
         <div class="form-item">
           <input
+            v-model="mobile"
             class="inp"
             maxlength="11"
             placeholder="请输入手机号码"
@@ -18,32 +19,128 @@
         </div>
         <div class="form-item">
           <input
+            v-model="picCode"
             class="inp"
             maxlength="5"
             placeholder="请输入图形验证码"
             type="text"
           />
-          <img src="@/assets/code.png" alt="" />
+          <img
+            @click="getCaptchaImageData"
+            v-if="picUrl"
+            :src="picUrl"
+            alt=""
+          />
         </div>
         <div class="form-item">
-          <input class="inp" placeholder="请输入短信验证码" type="text" />
-          <button>获取验证码</button>
+          <input
+            v-model="msgCode"
+            class="inp"
+            placeholder="请输入短信验证码"
+            type="text"
+          />
+          <button @click="getMsgCodeData">
+            {{
+              second === totalSecond ? '获取验证码' : second + `秒后重新发送`
+            }}
+          </button>
         </div>
       </div>
 
-      <div class="login-btn">登录</div>
+      <div class="login-btn" @click="Login">登录</div>
     </div>
   </div>
 </template>
 <script>
 import { Toast } from 'vant'
-
+import {
+  getCaptchaImageApi,
+  getMsgCodeApi,
+  postCodeLoginApi
+} from '@/api/login'
 export default {
   name: 'LoginPage',
+  data() {
+    return {
+      mobile: '', //输入的手机号
+      picCode: '', //输入的图形验证码信息
+      msgCode: '', //输入的短信验证码信息
+      picUrl: '', //图片的地址
+      picKey: '', //用于获取验证码时验证图形码是否正确
+      totalSecond: 60, //总秒数
+      second: 60,
+      timer: null //定时器 id作用
+    }
+  },
   methods: {
     onClickLeft() {
       Toast('返回')
+    },
+    //获取图形验证码
+    async getCaptchaImageData() {
+      const {
+        data: { base64, key }
+      } = await getCaptchaImageApi()
+      this.picUrl = base64
+      this.picKey = key
+    },
+    // 获取短信验证码
+    async getMsgCodeData() {
+      //判断输入信息是否有效
+      if (!this.validFn()) {
+        return
+      }
+
+      if (!this.timer && this.second === this.totalSecond) {
+        //允许获取验证码
+        await getMsgCodeApi(this.picCode, this.picKey, this.mobile)
+        this.$toast('发送成功，请等待')
+
+        //开启计时器
+        this.timer = setInterval(() => {
+          this.second--
+          if (this.second < 0) {
+            clearInterval(this.timer)
+            this.timer = null
+            this.second = this.totalSecond
+          }
+        }, 1000)
+      }
+    },
+    //验证输入信息是否有效
+    validFn() {
+      if (!/^1[3-9]\d{9}$/.test(this.mobile)) {
+        this.$toast('请输入正确手机号')
+        return false
+      }
+      if (!/^\w{4}$/.test(this.picCode)) {
+        this.$toast('请输入正确的图形验证码')
+        return false
+      }
+      return true
+    },
+    async Login() {
+      if (!this.validFn()) {
+        return
+      }
+      if (!/^\d{6}$/.test(this.msgCode)) {
+        this.$toast('请输入正确的手机验证码')
+        return
+      }
+
+      //调用接口 进行登录
+      await postCodeLoginApi(this.mobile, this.msgCode)
+      this.$router.push('/')
+      this.$toast('登录成功')
     }
+  },
+  async created() {
+    //获取图形验证码
+    this.getCaptchaImageData()
+  },
+  destroyed() {
+    //界面离开时 计时器销毁
+    clearInterval(this.timer)
   }
 }
 </script>
