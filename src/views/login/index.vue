@@ -53,6 +53,7 @@
 </template>
 <script>
 import { Toast } from 'vant'
+
 import {
   getCaptchaImageApi,
   getMsgCodeApi,
@@ -119,6 +120,7 @@ export default {
       }
       return true
     },
+    //进行登录
     async Login() {
       if (!this.validFn()) {
         return
@@ -129,7 +131,8 @@ export default {
       }
 
       //调用接口 进行登录
-      await postCodeLoginApi(this.mobile, this.msgCode)
+      const { data } = await postCodeLoginApi(this.mobile, this.msgCode)
+      this.$store.commit('user/setUserInfo', data)
       this.$router.push('/')
       this.$toast('登录成功')
     }
