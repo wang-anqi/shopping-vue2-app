@@ -6,7 +6,11 @@ const store = new Vuex.Store({
   state: {},
   mutations: {},
   actions: {},
-  getters: {},
+  getters: {
+    token(state) {
+      return state.user.userInfo.token
+    }
+  },
   modules: {
     user
   }
