@@ -64,7 +64,7 @@ export default {
       //将新搜索名词放入数组 头部
       this.history.unshift(key)
       setHistoryList(this.history)
-      this.$toast('等待跳转到searchlist')
+      this.$router.push(`/searchlist?goodsName=${key}`)
     },
     clearAll() {
       this.history = []

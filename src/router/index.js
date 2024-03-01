@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login/index.vue'
 import Layout from '@/views/layout/index.vue'
 import ProDetail from '@/views/prodetail'
-import Search from '@/views/search'
+import Search from '@/views/search/search.vue'
+import SearchList from '@/views/search/searchlist.vue'
 import Pay from '@/views/pay'
 import MyOrder from '@/views/myorder'
 import AddressList from '@/views/address/addressList.vue'
@@ -30,6 +31,10 @@ const routes = [
   {
     path: '/search',
     component: Search
+  },
+  {
+    path: '/searchlist',
+    component: SearchList
   },
   {
     path: '/pay',
