@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/login/index.vue'
 import Layout from '@/views/layout/index.vue'
-import Prodetail from '@/views/prodetail'
+import ProDetail from '@/views/prodetail'
 import Pay from '@/views/pay'
 import MyOrder from '@/views/myorder'
 import AddressList from '@/views/address/addressList.vue'
@@ -22,8 +22,9 @@ const routes = [
     component: Login
   },
   {
-    path: '/prodetail',
-    component: Prodetail
+    //动态路由传参数
+    path: '/prodetail/:goods_id',
+    component: ProDetail
   },
   {
     path: '/pay',
