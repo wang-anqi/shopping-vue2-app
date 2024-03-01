@@ -6,7 +6,9 @@ import { Toast } from 'vant'
 import { Swipe, SwipeItem } from 'vant'
 import { Grid, GridItem } from 'vant'
 import { Search } from 'vant'
+import { Icon } from 'vant'
 
+Vue.use(Icon)
 Vue.use(Search)
 Vue.use(Grid)
 Vue.use(GridItem)

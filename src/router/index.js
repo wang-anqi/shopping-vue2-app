@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login/index.vue'
 import Layout from '@/views/layout/index.vue'
 import ProDetail from '@/views/prodetail'
+import Search from '@/views/search'
 import Pay from '@/views/pay'
 import MyOrder from '@/views/myorder'
 import AddressList from '@/views/address/addressList.vue'
@@ -25,6 +26,10 @@ const routes = [
     //动态路由传参数
     path: '/prodetail/:goods_id',
     component: ProDetail
+  },
+  {
+    path: '/search',
+    component: Search
   },
   {
     path: '/pay',

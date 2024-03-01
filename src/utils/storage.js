@@ -17,3 +17,14 @@ export const setInfo = (info) => {
 export const removeInfo = () => {
   localStorage.removeItem(INFO_KEY)
 }
+
+// 搜索历史本地持久化
+const HISTORY_KEY = 'history_list'
+export const getHistoryList = () => {
+  const result = localStorage.getItem(HISTORY_KEY)
+  return result ? JSON.parse(result) : []
+}
+
+export const setHistoryList = (arr) => {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(arr))
+}
