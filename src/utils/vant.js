@@ -9,7 +9,9 @@ import { Search } from 'vant'
 import { Icon } from 'vant'
 import { Lazyload } from 'vant'
 import { Rate } from 'vant'
+import { ActionSheet } from 'vant'
 
+Vue.use(ActionSheet)
 Vue.use(Rate)
 Vue.use(Lazyload)
 Vue.use(Icon)
