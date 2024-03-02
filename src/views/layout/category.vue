@@ -63,4 +63,70 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.category {
+  padding-top: 100px;
+  padding-bottom: 50px;
+  height: 100%;
+  // 导航条样式定制
+  .van-nav-bar {
+    z-index: 999;
+  }
+
+  // 搜索框样式定制
+  .van-search {
+    position: fixed;
+    width: 100%;
+    top: 46px;
+    z-index: 999;
+  }
+  // 列表盒子
+  .list-box {
+    height: 100%;
+    display: flex;
+    .left {
+      width: 85px;
+      height: 100%;
+      background-color: #f3f3f3;
+      overflow: auto;
+      a {
+        display: block;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        color: #444444;
+        font-size: 12px;
+        &.active {
+          color: #fb442f;
+          background-color: #fff;
+        }
+      }
+    }
+    .right {
+      flex: 1;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-content: flex-start;
+      padding: 10px 0;
+      overflow: auto;
+      .cate-goods {
+        width: 33.3%;
+        margin-bottom: 10px;
+        img {
+          display: block;
+          width: 70px;
+          height: 70px;
+          margin: 5px auto;
+        }
+        p {
+          text-align: center;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+</style>
