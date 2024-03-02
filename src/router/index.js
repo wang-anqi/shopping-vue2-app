@@ -25,7 +25,7 @@ const routes = [
   },
   {
     //动态路由传参数
-    path: '/prodetail/:goods_id',
+    path: '/prodetail/:goodsId',
     component: ProDetail
   },
   {

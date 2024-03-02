@@ -12,3 +12,20 @@ export const getSearchGoodsListApi = (paramsObj) => {
     }
   })
 }
+//根据商品Id获取商品详情
+export const getGoodsDetailApi = (goodsId) => {
+  return request.get('/goods/detail', {
+    params: {
+      goodsId
+    }
+  })
+}
+// 获取商品评论内容
+export const getCommentListRowsApi = (goodsId, limit) => {
+  return request.get('/comment/listRows', {
+    params: {
+      goodsId,
+      limit
+    }
+  })
+}

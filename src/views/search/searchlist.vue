@@ -61,6 +61,7 @@ export default {
       const {
         data: { list }
       } = await getSearchGoodsListApi({
+        categoryId: this.$route.query.categoryId,
         sortType: this.sortType,
         goodsName: this.query
       })

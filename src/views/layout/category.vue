@@ -57,8 +57,8 @@ export default {
     async getCategoryListData() {
       const res = await getCategoryListApi()
       this.list = res.data.list
-      console.log(res)
-      console.log(this.list)
+      // console.log(res)
+      // console.log(this.list)
     }
   }
 }

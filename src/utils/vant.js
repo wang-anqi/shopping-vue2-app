@@ -7,7 +7,11 @@ import { Swipe, SwipeItem } from 'vant'
 import { Grid, GridItem } from 'vant'
 import { Search } from 'vant'
 import { Icon } from 'vant'
+import { Lazyload } from 'vant'
+import { Rate } from 'vant'
 
+Vue.use(Rate)
+Vue.use(Lazyload)
 Vue.use(Icon)
 Vue.use(Search)
 Vue.use(Grid)
