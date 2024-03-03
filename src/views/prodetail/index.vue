@@ -112,7 +112,8 @@
         </div>
         <div class="num-box">
           <span>数量</span>
-          数字框组件
+          <!-- 数字框 -->
+          <CountBox v-model="value"></CountBox>
         </div>
         <div class="showbtn" v-if="detail.stock_total > 0">
           <div class="btn" v-if="mode === 'cart'">加入购物车</div>
@@ -126,8 +127,12 @@
 <script>
 import { getCommentListRowsApi, getGoodsDetailApi } from '@/api/product'
 import defaultImg from '@/assets/default-avatar.png'
+import CountBox from '@/components/CountBox.vue'
 export default {
   name: 'ProdetailsPage',
+  components: {
+    CountBox
+  },
   data() {
     return {
       images: [
@@ -140,7 +145,8 @@ export default {
       total: 0,
       defaultImg,
       mode: 'cart',
-      showPannel: false
+      showPannel: false,
+      value: 5
     }
   },
   created() {
@@ -178,6 +184,16 @@ export default {
     },
     onChange(index) {
       this.current = index
+    },
+    // 数字框组件
+    handleSub() {
+      if (this.value < 0) {
+        return
+      }
+      this.value--
+    },
+    handleAdd() {
+      this.value++
     }
   }
 }
@@ -374,6 +390,33 @@ export default {
   }
   .btn-none {
     background-color: #cccccc;
+  }
+
+  // 弹窗中的数字框
+  .count-box {
+    width: 110px;
+    display: flex;
+
+    .add,
+    .minus {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      outline: none;
+      border: none;
+      background-color: #efefef;
+    }
+    .inp {
+      width: 40px;
+      height: 30px;
+      outline: none;
+      border: none;
+      margin: 0 5px;
+      background-color: #efefef;
+      text-align: center;
+    }
   }
 }
 </style>
