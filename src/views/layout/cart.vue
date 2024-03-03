@@ -1,5 +1,5 @@
 <template>
-  <div class="cart">
+  <div class="cart" v-if="isLogin && cartList.length > 0">
     <van-nav-bar title="购物车" fixed></van-nav-bar>
     <div class="cart-title">
       <span class="all"
@@ -71,6 +71,11 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="empty-cart" v-else>
+    <img src="@/assets/empty.png" alt="" />
+    <div class="tips">您的购物车是空的, 快去逛逛吧</div>
+    <div class="btn" @click="$router.push('/')">去逛逛</div>
   </div>
 </template>
 <script>
@@ -244,6 +249,31 @@ export default {
         }
       }
     }
+  }
+}
+.empty-cart {
+  padding: 80px 30px;
+  img {
+    width: 140px;
+    height: 92px;
+    display: block;
+    margin: 0 auto;
+  }
+  .tips {
+    text-align: center;
+    color: #666;
+    margin: 30px;
+  }
+  .btn {
+    width: 110px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    background-color: #fa2c20;
+    border-radius: 16px;
+    color: #fff;
+    display: block;
+    margin: 0 auto;
   }
 }
 </style>
