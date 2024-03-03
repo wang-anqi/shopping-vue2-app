@@ -7,23 +7,18 @@
     </div>
     <!-- 购物车商品列表 -->
     <div class="cart-list">
-      <div class="cart-item" v-for="item in 10" :key="item">
-        <van-checkbox></van-checkbox>
-        <div class="show">
-          <img
-            src="http://cba.itlike.com/public/uploads/10001/20230321/a072ef0eef1648a5c4eae81fad1b7583.jpg"
-            alt=""
-          />
+      <div class="cart-item" v-for="item in cartList" :key="item.goods_id">
+        <van-checkbox icon-size="18" :value="item.isChecked"></van-checkbox>
+        <div class="show" @click="$router.push(`/prodetail/${item.goods_id}`)">
+          <img :src="item.goods.goods_image" alt="" />
         </div>
         <div class="info">
-          <span class="tit text-ellipsis-2"
-            >新Pad 14英寸 12+128 远峰蓝 M6平板电脑
-            智能安卓娱乐十核游戏学习二合一
-            低蓝光护眼超清4K全面三星屏5GWIFI全网通 蓝魔快本平板
-          </span>
+          <span class="tit text-ellipsis-2">{{ item.goods.goods_name }} </span>
           <span class="bottom">
-            <div class="price">¥ <span>1247.04</span></div>
-            <CountBox v-model="value"></CountBox>
+            <div class="price">
+              ¥ <span>{{ item.goods.goods_price_min }}</span>
+            </div>
+            <CountBox v-model="item.goods_num"></CountBox>
           </span>
         </div>
       </div>
@@ -47,6 +42,7 @@
 </template>
 <script>
 import CountBox from '@/components/CountBox.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'CartPage',
   components: {
@@ -55,6 +51,17 @@ export default {
   data() {
     return {
       value: 2
+    }
+  },
+  created() {
+    if (this.isLogin) {
+      this.$store.dispatch('cart/getCartListData')
+    }
+  },
+  computed: {
+    ...mapState('cart', ['cartList']),
+    isLogin() {
+      return this.$store.getters.token
     }
   }
 }
