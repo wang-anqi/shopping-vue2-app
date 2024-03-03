@@ -10,7 +10,9 @@ import { Icon } from 'vant'
 import { Lazyload } from 'vant'
 import { Rate } from 'vant'
 import { ActionSheet } from 'vant'
+import { Dialog } from 'vant'
 
+Vue.use(Dialog)
 Vue.use(ActionSheet)
 Vue.use(Rate)
 Vue.use(Lazyload)

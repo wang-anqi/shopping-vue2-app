@@ -82,6 +82,7 @@
         <span>首页</span>
       </div>
       <div class="icon-cart">
+        <span v-if="cartTotal > 0" class="num">{{ cartTotal }}</span>
         <van-icon name="shopping-cart-o" />
         <span>购物车</span>
       </div>
@@ -116,7 +117,9 @@
           <CountBox v-model="value"></CountBox>
         </div>
         <div class="showbtn" v-if="detail.stock_total > 0">
-          <div class="btn" v-if="mode === 'cart'">加入购物车</div>
+          <div class="btn" v-if="mode === 'cart'" @click="addCart">
+            加入购物车
+          </div>
           <div class="btn now" v-if="mode === 'buyNow'">立刻购买</div>
         </div>
         <div class="btn-none" v-else>该商品已抢完</div>
@@ -126,8 +129,10 @@
 </template>
 <script>
 import { getCommentListRowsApi, getGoodsDetailApi } from '@/api/product'
+import { getCartTotalApi, postCartAddApi } from '@/api/cart'
 import defaultImg from '@/assets/default-avatar.png'
 import CountBox from '@/components/CountBox.vue'
+
 export default {
   name: 'ProdetailsPage',
   components: {
@@ -146,12 +151,14 @@ export default {
       defaultImg,
       mode: 'cart',
       showPannel: false,
-      value: 5
+      value: 5,
+      cartTotal: 0
     }
   },
   created() {
     this.getGoodsDetailData()
     this.getCommentListRowsData()
+    this.getCartTotalData()
   },
   computed: {
     // 从路由中获取商品Id参数
@@ -194,6 +201,49 @@ export default {
     },
     handleAdd() {
       this.value++
+    },
+    //加入购物车
+    async addCart() {
+      if (!this.$store.getters.token) {
+        // 对话框提醒
+        this.$dialog
+          .confirm({
+            title: '温馨提示',
+            message: '此时需要先登录才能继续操作哦',
+            confirmButtonText: '去登录',
+            cancelButtonText: '再逛逛'
+          })
+          .then(() => {
+            // on confirm
+            this.$router.replace({
+              path: '/login',
+              query: {
+                backUrl: this.$route.fullPath
+              }
+            })
+          })
+          .catch(() => {
+            // on cancel
+          })
+        return
+      }
+      // 进行加入购物车操作
+      const { data } = await postCartAddApi(
+        this.goodsId,
+        this.value,
+        this.detail.skuList[0].goods_sku_id
+      )
+      this.cartTotal = data.cartTotal
+      this.$toast('加入购物车成功')
+      this.showPannel = false
+
+      // console.log(data)
+    },
+
+    // 获取购物车商品总数
+    async getCartTotalData() {
+      const { data } = await getCartTotalApi()
+      this.cartTotal = data.cartTotal
     }
   }
 }
@@ -336,6 +386,23 @@ export default {
     .btn-buy {
       background-color: #fe5630;
     }
+  }
+}
+.footer .icon-cart {
+  position: relative;
+  padding: 0 6px;
+  .num {
+    z-index: 999;
+    position: absolute;
+    top: -2px;
+    right: 0;
+    padding: 0 4px;
+    min-width: 16px;
+
+    color: #fff;
+    text-align: center;
+    background-color: #ee0a24;
+    border-radius: 50%;
   }
 }
 

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 //非组件中 toast的使用
 import { Toast } from 'vant'
 const baseURL = 'http://cba.itlike.com/public/index.php?s=/api/'
@@ -18,6 +19,11 @@ request.interceptors.request.use(
       duration: 0
     })
     // 在发送请求之前做些什么
+    const token = store.getters.token
+    if (token) {
+      config.headers['Access-Token'] = token
+      config.headers.platform = 'H5'
+    }
     return config
   },
   function (error) {

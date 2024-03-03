@@ -133,7 +133,9 @@ export default {
       //调用接口 进行登录
       const { data } = await postCodeLoginApi(this.mobile, this.msgCode)
       this.$store.commit('user/setUserInfo', data)
-      this.$router.push('/')
+      const url = this.$route.query.backUrl || '/'
+      this.$router.replace(url)
+      // this.$router.push('/')
       this.$toast('登录成功')
     }
   },
