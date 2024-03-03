@@ -6,7 +6,9 @@
         >共<i>{{ cartTotalNums }}</i
         >件商品</span
       >
-      <span class="edit"> <van-icon name="edit" />编辑</span>
+      <span class="edit" @click="isEdit = !isEdit">
+        <van-icon name="edit" />编辑</span
+      >
     </div>
     <!-- 购物车商品列表 -->
     <div class="cart-list">
@@ -52,8 +54,16 @@
             >￥<i class="totalPrice">{{ chosenPrice }}</i></span
           >
         </div>
-        <div v-if="true" class="goPay">结算({{ chosenNums }})</div>
-        <div v-else class="delete">删除({{ chosenNums }})</div>
+        <div
+          v-if="!isEdit"
+          :class="{ disabled: chosenNums === 0 }"
+          class="goPay"
+        >
+          结算({{ chosenNums }})
+        </div>
+        <div v-else class="delete" :class="{ disabled: chosenNums === 0 }">
+          删除({{ chosenNums }})
+        </div>
       </div>
     </div>
   </div>
@@ -68,12 +78,23 @@ export default {
   },
   data() {
     return {
-      value: 2
+      value: 2,
+      isEdit: false
     }
   },
   created() {
     if (this.isLogin) {
       this.$store.dispatch('cart/getCartListData')
+    }
+  },
+  // 全选框：编辑状态下全不选  非编辑状态下为全选
+  watch: {
+    isEdit(value) {
+      if (value) {
+        this.$store.commit('cart/toggleAllCheck', false)
+      } else {
+        this.$store.commit('cart/toggleAllCheck', true)
+      }
     }
   },
   computed: {

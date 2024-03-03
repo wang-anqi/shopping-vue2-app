@@ -234,10 +234,10 @@ export default {
         this.detail.skuList[0].goods_sku_id
       )
       this.cartTotal = data.cartTotal
-      // this.$toast('加入购物车成功')
+      this.$toast('加入购物车成功')
 
       this.showPannel = false
-      this.$router.push('/cart')
+      // this.$router.push('/cart')
       // console.log(data)
     },
 
