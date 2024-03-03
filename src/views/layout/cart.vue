@@ -25,7 +25,16 @@
             <div class="price">
               ¥ <span>{{ item.goods.goods_price_min }}</span>
             </div>
-            <CountBox v-model="item.goods_num"></CountBox>
+            <!-- 数字框组件 -->
+            <div class="count-box">
+              <CountBox
+                :value="item.goods_num"
+                @input="
+                  (value) =>
+                    changeCount(value, item.goods_id, item.goods_sku_id)
+                "
+              ></CountBox>
+            </div>
           </span>
         </div>
       </div>
@@ -88,6 +97,14 @@ export default {
     //这里巧妙地使用了this指针
     toggleAllCheck() {
       this.$store.commit('cart/toggleAllCheck', !this.isAllChosen)
+    },
+    // 改变商品数量
+    changeCount(value, goodsId, skuId) {
+      this.$store.dispatch('cart/changeCountDataAction', {
+        value,
+        goodsId,
+        skuId
+      })
     }
   }
 }

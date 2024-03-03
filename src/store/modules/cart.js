@@ -1,4 +1,4 @@
-import { getCartListApi } from '@/api/cart'
+import { getCartListApi, postCartUpdataApi } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -8,8 +8,10 @@ export default {
     }
   },
   mutations: {
+    // 设定cartList数据
     setCartList(state, newList) {
       state.cartList = newList
+      console.log(newList)
     },
     toggleCheck(state, goodsId) {
       const goods = state.cartList.find((item) => item.goods_id === goodsId)
@@ -19,13 +21,27 @@ export default {
       state.cartList.forEach((item) => {
         item.isChecked = flag
       })
+    },
+    // 改变数量
+    changeCount(state, { goodsId, value }) {
+      const obj = state.cartList.find((item) => item.goods_id === goodsId)
+      obj.goods_num = value
     }
   },
   actions: {
+    // 获取购物车列表数据
     async getCartListData(context) {
       const { data } = await getCartListApi()
       data.list.forEach((item) => (item.isChecked = true))
       context.commit('setCartList', data.list)
+    },
+    async changeCountDataAction(context, obj) {
+      const { goodsId, value, skuId } = obj
+      context.commit('changeCount', {
+        goodsId,
+        value
+      })
+      await postCartUpdataApi(goodsId, value, skuId)
     }
   },
   getters: {

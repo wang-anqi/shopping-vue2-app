@@ -1,8 +1,8 @@
 <template>
   <div class="count-box">
-    <div class="minus" @click="handleSub">-</div>
+    <button @click="handleSub" class="minus">-</button>
     <input :value="value" @change="handleChange" class="inp" type="text" />
-    <div class="add" @click="handleAdd">+</div>
+    <button @click="handleAdd" class="add">+</button>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   methods: {
     // 数字框组件
     handleSub() {
-      if (this.value < 0) {
+      if (this.value <= 1) {
         return
       }
       this.$emit('input', this.value - 1)

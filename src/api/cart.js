@@ -15,3 +15,11 @@ export const getCartTotalApi = () => {
 export const getCartListApi = () => {
   return request.get('/cart/list')
 }
+// 更新购物车数量
+export const postCartUpdataApi = (goodsId, goodsNum, goodsSkuId) => {
+  return request.post('/cart/update', {
+    goodsId,
+    goodsNum,
+    goodsSkuId
+  })
+}
