@@ -23,3 +23,9 @@ export const postCartUpdataApi = (goodsId, goodsNum, goodsSkuId) => {
     goodsSkuId
   })
 }
+// 删除购物车中数据
+export const delCartApi = (cartIds) => {
+  return request.post('/cart/clear', {
+    cartIds
+  })
+}

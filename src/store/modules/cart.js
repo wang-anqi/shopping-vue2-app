@@ -1,5 +1,5 @@
-import { getCartListApi, postCartUpdataApi } from '@/api/cart'
-
+import { delCartApi, getCartListApi, postCartUpdataApi } from '@/api/cart'
+import { Toast } from 'vant'
 export default {
   namespaced: true,
   state() {
@@ -11,7 +11,7 @@ export default {
     // 设定cartList数据
     setCartList(state, newList) {
       state.cartList = newList
-      console.log(newList)
+      // console.log(newList)
     },
     toggleCheck(state, goodsId) {
       const goods = state.cartList.find((item) => item.goods_id === goodsId)
@@ -42,6 +42,15 @@ export default {
         value
       })
       await postCartUpdataApi(goodsId, value, skuId)
+    },
+    async delCart(context) {
+      const chosenCartListRes = context.getters.chosenCartList
+      const cartIds = chosenCartListRes.map((item) => item.id)
+      await delCartApi(cartIds)
+      Toast('删除成功')
+
+      // 重现渲染购物车列表
+      context.dispatch('getCartListData')
     }
   },
   getters: {

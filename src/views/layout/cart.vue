@@ -61,7 +61,12 @@
         >
           结算({{ chosenNums }})
         </div>
-        <div v-else class="delete" :class="{ disabled: chosenNums === 0 }">
+        <div
+          @click="handelDel"
+          v-else
+          class="delete"
+          :class="{ disabled: chosenNums === 0 }"
+        >
           删除({{ chosenNums }})
         </div>
       </div>
@@ -126,6 +131,11 @@ export default {
         goodsId,
         skuId
       })
+    },
+    async handelDel() {
+      if (this.chosenNums === 0) return
+      await this.$store.dispatch('cart/delCart')
+      this.isEdit = false
     }
   }
 }
