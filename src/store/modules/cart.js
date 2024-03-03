@@ -10,6 +10,15 @@ export default {
   mutations: {
     setCartList(state, newList) {
       state.cartList = newList
+    },
+    toggleCheck(state, goodsId) {
+      const goods = state.cartList.find((item) => item.goods_id === goodsId)
+      goods.isChecked = !goods.isChecked
+    },
+    toggleAllCheck(state, flag) {
+      state.cartList.forEach((item) => {
+        item.isChecked = flag
+      })
     }
   },
   actions: {
@@ -42,6 +51,10 @@ export default {
           return sum + item.goods_num * item.goods.goods_price_min
         }, 0)
         .toFixed(2)
+    },
+    // 判断总选 是否选中
+    isAllChosen(state) {
+      return state.cartList.every((item) => item.isChecked)
     }
   }
 }
