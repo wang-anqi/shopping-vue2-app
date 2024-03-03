@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      value: 2,
+      value: 1,
       isEdit: false
     }
   },

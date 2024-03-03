@@ -151,7 +151,7 @@ export default {
       defaultImg,
       mode: 'cart',
       showPannel: false,
-      value: 5,
+      value: 1,
       cartTotal: 0
     }
   },
