@@ -3,7 +3,7 @@
     <van-nav-bar title="地址列表" left-arrow fixed />
 
     <div class="list">
-      <div class="list-item">
+      <div class="list-item" v-for="item in addressList" :key="item.address_id">
         <div class="left">
           <van-checkbox
             v-model="checked"
@@ -11,50 +11,16 @@
           ></van-checkbox>
         </div>
         <div class="content">
-          <div class="info">
-            <span class="title">王子 18552651234 </span>
-            <span v-if="isDefault" class="defalut">默认</span>
-          </div>
-
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
-        </div>
-        <div class="right">
-          <van-icon name="edit" />
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="left">
-          <van-checkbox
-            v-model="checked"
-            checked-color="#ee0a24"
-          ></van-checkbox>
-        </div>
-        <div class="content">
-          <div class="info">
-            <span class="title">张霞 18552651234 </span>
-            <span v-if="false" class="defalut">默认</span>
-          </div>
-
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
-        </div>
-        <div class="right">
-          <van-icon name="edit" />
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="left">
-          <van-checkbox
-            v-model="checked"
-            checked-color="#ee0a24"
-          ></van-checkbox>
-        </div>
-        <div class="content">
-          <div class="info">
-            <span class="title">李丽 18552651234 </span>
-            <span v-if="false" class="defalut">默认</span>
-          </div>
-
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
+          <span class="info">{{ item.name }} {{ item.phone }}</span>
+          <i class="defalut">默认</i>
+          <p class="address">
+            {{
+              item.region.province +
+              item.region.city +
+              item.region.region +
+              item.detail
+            }}
+          </p>
         </div>
         <div class="right">
           <van-icon name="edit" />
@@ -74,8 +40,7 @@ export default {
   data() {
     return {
       checked: false,
-      addressList: [],
-      isDefault: true
+      addressList: []
       // {
       //   address_id: 10012,
       // name: "张小",
@@ -138,33 +103,35 @@ export default {
       }
       .content {
         flex: 1;
-        padding: 5px 6px;
-        font-size: 14px;
         .info {
-          display: flex;
-          .title {
-            font-size: 16px;
-          }
-          .defalut {
-            display: block;
-            margin-left: 8px;
-            padding: 3px 5px;
-            color: #fff;
-            text-align: center;
-            background-color: #ee0a24;
-            border-radius: 15px;
-          }
+          font-size: 16px;
         }
         .address {
           padding-top: 3px;
+          font-size: 14px;
         }
       }
-
       .right {
         width: 22px;
         font-size: 22px;
         color: #c3c3c3;
       }
+    }
+  }
+  .list-item .content {
+    position: relative;
+    .default {
+      //去掉默认斜体
+      font: normal;
+      z-index: 999;
+      position: absolute;
+      top: 0px;
+      right: 2px;
+      padding: 0 4px;
+      color: #fff;
+      text-align: center;
+      background-color: #ee0a24;
+      border-radius: 10px;
     }
   }
 

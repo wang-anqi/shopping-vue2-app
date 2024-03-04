@@ -77,11 +77,11 @@
 
     <!-- 底部 -->
     <div class="footer">
-      <div class="icon-home">
+      <div class="icon-home" @click="goHome">
         <van-icon name="wap-home-o" />
         <span>首页</span>
       </div>
-      <div class="icon-cart">
+      <div class="icon-cart" @click="goCart">
         <span v-if="cartTotal > 0" class="num">{{ cartTotal }}</span>
         <van-icon name="shopping-cart-o" />
         <span>购物车</span>
@@ -120,7 +120,9 @@
           <div class="btn" v-if="mode === 'cart'" @click="addCart">
             加入购物车
           </div>
-          <div class="btn now" v-if="mode === 'buyNow'">立刻购买</div>
+          <div class="btn now" v-if="mode === 'buyNow'" @click="buyNow">
+            立刻购买
+          </div>
         </div>
         <div class="btn-none" v-else>该商品已抢完</div>
       </div>
@@ -132,12 +134,14 @@ import { getCommentListRowsApi, getGoodsDetailApi } from '@/api/product'
 import { getCartTotalApi, postCartAddApi } from '@/api/cart'
 import defaultImg from '@/assets/default-avatar.png'
 import CountBox from '@/components/CountBox.vue'
+import loginConfirm from '@/mixins/loginConfirm'
 
 export default {
   name: 'ProdetailsPage',
   components: {
     CountBox
   },
+  mixins: [loginConfirm],
   data() {
     return {
       images: [
@@ -204,29 +208,10 @@ export default {
     },
     //加入购物车
     async addCart() {
-      if (!this.$store.getters.token) {
-        // 对话框提醒
-        this.$dialog
-          .confirm({
-            title: '温馨提示',
-            message: '此时需要先登录才能继续操作哦',
-            confirmButtonText: '去登录',
-            cancelButtonText: '再逛逛'
-          })
-          .then(() => {
-            // on confirm
-            this.$router.replace({
-              path: '/login',
-              query: {
-                backUrl: this.$route.fullPath
-              }
-            })
-          })
-          .catch(() => {
-            // on cancel
-          })
+      if (this.loginConfirm()) {
         return
       }
+
       // 进行加入购物车操作
       const { data } = await postCartAddApi(
         this.goodsId,
@@ -240,11 +225,32 @@ export default {
       // this.$router.push('/cart')
       // console.log(data)
     },
+    //立即购买
+    buyNow() {
+      if (this.loginConfirm()) {
+        return
+      }
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.goodsId,
+          goodsSkuId: this.detail.skuList[0].goods_sku_id,
+          goodsNum: this.value
+        }
+      })
+    },
 
     // 获取购物车商品总数
     async getCartTotalData() {
       const { data } = await getCartTotalApi()
       this.cartTotal = data.cartTotal
+    },
+    goHome() {
+      this.$router.push('/home')
+    },
+    goCart() {
+      this.$router.push('/cart')
     }
   }
 }

@@ -58,6 +58,7 @@
           v-if="!isEdit"
           :class="{ disabled: chosenNums === 0 }"
           class="goPay"
+          @click="goPayMoney"
         >
           结算({{ chosenNums }})
         </div>
@@ -115,7 +116,8 @@ export default {
       'cartTotalNums',
       'chosenPrice',
       'chosenNums',
-      'isAllChosen'
+      'isAllChosen',
+      'chosenCartList'
     ]),
     isLogin() {
       return this.$store.getters.token
@@ -141,6 +143,18 @@ export default {
       if (this.chosenNums === 0) return
       await this.$store.dispatch('cart/delCart')
       this.isEdit = false
+    },
+    // 结算
+    goPayMoney() {
+      if (this.chosenNums > 0) {
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'cart',
+            cartIds: this.chosenCartList.map((item) => item.id).join(',')
+          }
+        })
+      }
     }
   }
 }

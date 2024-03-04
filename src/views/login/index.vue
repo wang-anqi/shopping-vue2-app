@@ -52,8 +52,6 @@
   </div>
 </template>
 <script>
-import { Toast } from 'vant'
-
 import {
   getCaptchaImageApi,
   getMsgCodeApi,
@@ -75,7 +73,7 @@ export default {
   },
   methods: {
     onClickLeft() {
-      Toast('返回')
+      this.$router.push('/')
     },
     //获取图形验证码
     async getCaptchaImageData() {
