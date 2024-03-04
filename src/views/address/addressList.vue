@@ -3,58 +3,33 @@
     <van-nav-bar title="地址列表" left-arrow fixed />
 
     <div class="list">
-      <div class="list-item">
+      <div
+        class="list-item"
+        v-for="item in addressList"
+        :key="item.address_id"
+        @click="goBack(item.address_id)"
+      >
         <div class="left">
           <van-checkbox
+            v-if="$route.query.form != 'payPlat'"
             v-model="checked"
             checked-color="#ee0a24"
           ></van-checkbox>
         </div>
         <div class="content">
           <div class="info">
-            <span class="title">王子 18552651234 </span>
-            <span v-if="isDefault" class="defalut">默认</span>
-          </div>
-
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
-        </div>
-        <div class="right">
-          <van-icon name="edit" />
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="left">
-          <van-checkbox
-            v-model="checked"
-            checked-color="#ee0a24"
-          ></van-checkbox>
-        </div>
-        <div class="content">
-          <div class="info">
-            <span class="title">张霞 18552651234 </span>
+            <span class="title">{{ item.name }} {{ item.phone }} </span>
             <span v-if="false" class="defalut">默认</span>
           </div>
 
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
-        </div>
-        <div class="right">
-          <van-icon name="edit" />
-        </div>
-      </div>
-      <div class="list-item">
-        <div class="left">
-          <van-checkbox
-            v-model="checked"
-            checked-color="#ee0a24"
-          ></van-checkbox>
-        </div>
-        <div class="content">
-          <div class="info">
-            <span class="title">李丽 18552651234 </span>
-            <span v-if="false" class="defalut">默认</span>
-          </div>
-
-          <p class="address">江苏省无锡市滨湖区文苑路10号</p>
+          <p class="address">
+            {{
+              item.region.province +
+              item.region.city +
+              item.region.region +
+              item.detail
+            }}
+          </p>
         </div>
         <div class="right">
           <van-icon name="edit" />
@@ -67,29 +42,14 @@
   </div>
 </template>
 <script>
-import { getAddressListApi } from '@/api/address'
+import { addAddressApi, getAddressListApi } from '@/api/address'
 
 export default {
   name: 'AdressListPage',
   data() {
     return {
       checked: false,
-      addressList: [],
-      isDefault: true
-      // {
-      //   address_id: 10012,
-      // name: "张小",
-      // phone: "18999292929",
-      // province_id: 782,
-      // city_id: 783,
-      // region_id: 785,
-      // detail: "北京路1号楼8888室",
-      // user_id: 10003,
-      // region: {
-      //   province: "上海",
-      //   city: "上海市",
-      //   region: "徐汇区"
-      // },
+      addressList: []
     }
   },
   created() {
@@ -105,9 +65,34 @@ export default {
 
       console.log(this.addressList)
     },
-    getAddressDetail() {},
-    addAddress() {
-      this.$toast('新增地址')
+    async addAddress() {
+      await addAddressApi()
+      this.$toast('添加成功')
+    },
+    goBack(addressid) {
+      if (this.$route.query.mode === 'buyNow') {
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'buyNow',
+            goodsSkuId: this.$route.query.goodsSkuId,
+            goodsId: this.$route.query.goodsId,
+            goodsNum: this.$route.query.goodsNum,
+            defalutId: addressid
+          }
+        })
+      }
+      if (this.$route.query.mode === 'cart') {
+        console.log(2)
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'cart',
+            cartIds: this.$route.query.cartIds,
+            defalutId: addressid
+          }
+        })
+      }
     }
   }
 }
@@ -159,12 +144,27 @@ export default {
           padding-top: 3px;
         }
       }
-
       .right {
         width: 22px;
         font-size: 22px;
         color: #c3c3c3;
       }
+    }
+  }
+  .list-item .content {
+    position: relative;
+    .default {
+      //去掉默认斜体
+      font: normal;
+      z-index: 999;
+      position: absolute;
+      top: 0px;
+      right: 2px;
+      padding: 0 4px;
+      color: #fff;
+      text-align: center;
+      background-color: #ee0a24;
+      border-radius: 10px;
     }
   }
 

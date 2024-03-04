@@ -82,6 +82,7 @@
         <!-- 买家留言 -->
         <div class="buytips">
           <textarea
+            v-model="remark"
             placeholder="选填：买家留言（50字内）"
             name=""
             id=""
@@ -96,13 +97,13 @@
       <div class="left">
         实付款：<span>￥{{ order.orderTotalPrice }}</span>
       </div>
-      <div class="tipsbtn">提交订单</div>
+      <div class="tipsbtn" @click="submitOrder">提交订单</div>
     </div>
   </div>
 </template>
 <script>
 import { getAddressDefaultIdApi, getAddressDetailApi } from '@/api/address'
-import { checkOrderApi } from '@/api/order'
+import { checkOrderApi, submitOrderApi } from '@/api/order'
 
 export default {
   name: 'PayPage',
@@ -113,7 +114,8 @@ export default {
       address: {},
       defaultId: 0,
       order: {},
-      personal: {}
+      personal: {},
+      remark: ''
     }
   },
   created() {
@@ -141,6 +143,9 @@ export default {
     },
     goodsNum() {
       return this.$route.query.goodsNum
+    },
+    defaultIdQuery() {
+      return this.$route.query.defaultId
     }
   },
   methods: {
@@ -152,7 +157,7 @@ export default {
       console.log(defaultId)
 
       // 如果存在默认地址
-      if (defaultId) {
+      if (defaultId || this.defaultIdQuery) {
         const {
           data: { detail }
         } = await getAddressDetailApi(defaultId)
@@ -162,7 +167,28 @@ export default {
     },
     // 选择地址
     choosenAddress() {
-      this.$toast('请选择地址！')
+      if (this.mode === 'cart') {
+        this.$router.push({
+          path: '/addresslist',
+          query: {
+            form: 'payPlat',
+            mode: 'cart',
+            cartIds: this.cartIds
+          }
+        })
+      }
+      if (this.mode === 'buyNow') {
+        this.$router.push({
+          path: '/addresslist',
+          query: {
+            form: 'payPlat',
+            mode: 'buyNow',
+            goodsSkuId: this.goodsSkuId,
+            goodsId: this.goodsId,
+            goodsNum: this.goodsNum
+          }
+        })
+      }
     },
     // 获取订单信息
     async getOrderPersonList() {
@@ -184,6 +210,25 @@ export default {
         this.order = order
         this.personal = personal
       }
+    },
+    // 提交订单
+    async submitOrder() {
+      if (this.mode === 'cart') {
+        await submitOrderApi(this.mode, {
+          remark: this.remark,
+          cartIds: this.cartIds
+        })
+      }
+      if (this.mode === 'buyNow') {
+        await submitOrderApi(this.mode, {
+          remark: this.remark,
+          goodsId: this.goodsId,
+          goodsSkuId: this.goodsSkuId,
+          goodsNum: this.goodsNum
+        })
+      }
+      this.$toast.success('支付成功')
+      this.$router.replace('/myorder')
     }
   }
 }

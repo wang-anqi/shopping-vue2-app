@@ -12,7 +12,10 @@ import { Rate } from 'vant'
 import { ActionSheet } from 'vant'
 import { Dialog } from 'vant'
 import { Checkbox, CheckboxGroup } from 'vant'
+import { Tab, Tabs } from 'vant'
 
+Vue.use(Tab)
+Vue.use(Tabs)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(Dialog)
